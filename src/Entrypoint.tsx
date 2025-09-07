@@ -12,67 +12,48 @@ import moment from 'moment';
 import 'moment/locale/ar';
 import { getAppLanguage } from './Local/i18n';
 import { CustomToast } from './components/CustomToast/index';
-import { UpdateVersionModal } from './components/Modals/UpdateVersionModal/UpdateVersionModal';
-import OneSignal from 'react-native-onesignal'
+// import { UpdateVersionModal } from './components/Modals/UpdateVersionModal/UpdateVersionModal';
+// import OneSignal from 'react-native-onesignal';
 const { persistor, store } = configureStore();
 
 export default class Entrypoint extends Component {
+  componentDidMount = async () => {
+    if (getAppLanguage() === 'ar') moment.locale('ar');
+    else moment.locale('en');
 
-    componentDidMount  =async () => {
-        if (getAppLanguage() == "ar")
-            moment.locale('ar');
-        else
-            moment.locale('en');
+    //     /* O N E S I G N A L   S E T U P */
+    //     OneSignal.setAppId('e48ad017-2143-4023-859e-4da8c734cf8a');
+    //     OneSignal.setLogLevel(6, 0);
+    //     OneSignal.setRequiresUserPrivacyConsent(false);
+    //     OneSignal.promptForPushNotificationsWithUserResponse(response => {});
+    //     /* O N E S I G N A L  H A N D L E R S */
+    //     OneSignal.setNotificationWillShowInForegroundHandler(notifReceivedEvent => {
+    //       // let notif = notifReceivedEvent.getNotification();
+    //     });
+    //     OneSignal.setNotificationOpenedHandler(notification => {});
 
-                    /* O N E S I G N A L   S E T U P */
-        OneSignal.setAppId("e48ad017-2143-4023-859e-4da8c734cf8a");
-        OneSignal.setLogLevel(6, 0);
-        OneSignal.setRequiresUserPrivacyConsent(false);
-        OneSignal.promptForPushNotificationsWithUserResponse(response => {
+    //     OneSignal.setInAppMessageClickHandler(event => {});
+    //     OneSignal.addEmailSubscriptionObserver(event => {});
+    //     OneSignal.addSubscriptionObserver(event => {});
+    //     OneSignal.addPermissionObserver(event => {});
+  };
 
-        }); 
-        /* O N E S I G N A L  H A N D L E R S */
-        OneSignal.setNotificationWillShowInForegroundHandler(notifReceivedEvent => {
-            // let notif = notifReceivedEvent.getNotification();
-        });
-        OneSignal.setNotificationOpenedHandler(notification => {
+  render() {
+    // console.disableYellowBox = true;
 
-        });
-    
-        OneSignal.setInAppMessageClickHandler(event => {
+    return (
+      <Provider store={store}>
+        <StatusBar
+          backgroundColor="transparent"
+          translucent={true}
+          barStyle="light-content"
+        />
 
-        });
-        OneSignal.addEmailSubscriptionObserver((event) => {
-
-        });
-        OneSignal.addSubscriptionObserver(event => {
-
-        });
-        OneSignal.addPermissionObserver(event => {
-
-        });
-
-    }
-    render() {
-        console.disableYellowBox = true;
-
-        return (
-            <Provider store={store}>
-                <StatusBar
-                    backgroundColor="transparent"
-                    translucent={true}
-                    
-                    barStyle="light-content" />
-
-                <PersistGate
-                    loading={<ActivityIndicator />}
-                    persistor={persistor}
-                >
-                    <Navigator />
-                    <CustomToast />
-                
-                </PersistGate>
-            </Provider>
-        );
-    }
+        <PersistGate loading={<ActivityIndicator />} persistor={persistor}>
+          <Navigator />
+          <CustomToast />
+        </PersistGate>
+      </Provider>
+    );
+  }
 }
