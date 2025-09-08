@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NavigationService from './NavigationService';
 import { strings } from '../Local/i18n';
 import { Text } from 'react-native-svg';
-// import Splash from '../screens/Splash';
+import Splash from '../screens/Splash';
 // import Home from '../screens/Home';
 // import { TabBottomComponent } from '../components/index';
 // import Brands from '../screens/Brands';
@@ -469,12 +469,12 @@ export default function RNApp() {
           initialRouteName="Splash"
           headerMode="none"
         >
-          {/* <Stack.Screen
+          <Stack.Screen
             options={{ animationEnabled: true }}
             name="Splash"
             component={Splash}
           />
-
+          {/* 
           <Stack.Screen
             options={{ animationEnabled: true }}
             name="SignIn"
