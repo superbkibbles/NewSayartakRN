@@ -3,7 +3,7 @@
  * Everthing starts from the entrypoint
  */
 import React, { Component } from 'react';
-import { ActivityIndicator, StatusBar } from 'react-native';
+import { ActivityIndicator, StatusBar, Text, View } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import Navigator from '../src/navigation';
@@ -42,6 +42,7 @@ export default class Entrypoint extends Component {
     // console.disableYellowBox = true;
 
     return (
+      //   <View></View>
       <Provider store={store}>
         <StatusBar
           backgroundColor="transparent"
@@ -52,6 +53,9 @@ export default class Entrypoint extends Component {
         <PersistGate loading={<ActivityIndicator />} persistor={persistor}>
           <Navigator />
           <CustomToast />
+          {/* <View>
+            <Text>Hello World</Text>
+          </View> */}
         </PersistGate>
       </Provider>
     );
