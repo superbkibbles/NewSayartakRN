@@ -6,7 +6,7 @@ import { Text_, ViewRow } from '../../Molecules';
 import { config } from '../../config/appConfig';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { strings } from '../../Local/i18n';
-import { SharedElement } from 'react-navigation-shared-element';
+// import { SharedElement } from 'react-navigation-shared-element';
 import { priceFormatter } from '../../utils/datesUtils';
 
 import ContentLoader, { Rect } from 'react-content-loader/native';
@@ -90,16 +90,16 @@ export function CarItem(params: CarItemProps) {
         ]}
       >
         <Animated.View style={{ width: imageWidth }}>
-          <SharedElement id={`item.${item.id}.photo`}>
-            <Image_
-              source={{ uri: item.images.length ? item.images[0].image : '' }}
-              style={{
-                height: '100%',
-                maxHeight: calcHeight(146),
-                width: '100%',
-              }}
-            />
-          </SharedElement>
+          {/* <SharedElement id={`item.${item.id}.photo`}> */}
+          <Image_
+            source={{ uri: item.images.length ? item.images[0].image : '' }}
+            style={{
+              height: '100%',
+              maxHeight: calcHeight(146),
+              width: '100%',
+            }}
+          />
+          {/* </SharedElement> */}
         </Animated.View>
 
         <Animated.View
