@@ -60,7 +60,7 @@ const ApiConstants = {
 
   SOCAIL_LOGIN: '/accounts/user/socail_login/',
   IMAGE_URL: 'https://www.syartk.net/',
-  BASE_URL: 'https://www.syartk.net/api',
+  BASE_URL: 'http://188.245.63.83:8080/api',
   GET_BRANDS: '/ads/brand/',
   GET_ALL_CARS: '/ads/car/',
   GET_SHOW_ROOMS: '/accounts/showroom/',

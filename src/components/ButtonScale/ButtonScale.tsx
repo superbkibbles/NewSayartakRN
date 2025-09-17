@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TouchableWithoutFeedback, Animated, ViewProp } from 'react-native';
+import { TouchableWithoutFeedback, Animated, ViewProps } from 'react-native';
 
 export default class TouchableScale extends React.Component {
+  static defaultProps: {
+    defaultScale: number;
+    activeScale: number;
+    tension: number;
+    friction: number;
+    useNativeDriver: boolean;
+  };
   constructor(...args) {
     super(...args);
     /** @type {TouchableScaleProps} */
@@ -89,7 +96,7 @@ export default class TouchableScale extends React.Component {
 
 TouchableScale.propTypes = {
   ...TouchableWithoutFeedback.propTypes,
-  style: ViewProp.style,
+  //   style: ViewProps.style,
   defaultScale: PropTypes.number.isRequired,
   activeScale: PropTypes.number.isRequired,
   tension: PropTypes.number.isRequired,

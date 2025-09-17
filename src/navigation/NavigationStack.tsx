@@ -7,7 +7,7 @@ import NavigationService from './NavigationService';
 import { strings } from '../Local/i18n';
 import { Text } from 'react-native-svg';
 import Splash from '../screens/Splash';
-// import Home from '../screens/Home';
+import Home from '../screens/Home';
 // import { TabBottomComponent } from '../components/index';
 // import Brands from '../screens/Brands';
 // import CarDetails from '../screens/CarDetails';
@@ -149,7 +149,12 @@ const DummyScreen = () => {
 
 function HomeStack() {
   return (
-    <Stack.Navigator initialRouteName="AddCar" headerMode="none">
+    <Stack.Navigator initialRouteName="Home" headerMode="none">
+      <Stack.Screen
+        options={{ animationEnabled: true }}
+        name="Home"
+        component={Home}
+      />
       {/* <Stack.Screen
           options={{ animationEnabled: true }}
           name="FilterBrands"
