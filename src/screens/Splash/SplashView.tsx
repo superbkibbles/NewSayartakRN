@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Animated, Easing, ActivityIndicator, Image } from 'react-native';
 import images from '../../config/images';
 import { config } from '../../config/appConfig';
@@ -9,8 +9,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 function SplashView() {
   let opacity = useRef(new Animated.Value(0.1)).current;
   let scale = useRef(new Animated.Value(0)).current;
-  let height = useRef(new Animated.Value(calcHeight(900.32, 812))).current;
-  let width = useRef(new Animated.Value(calcWidth(846.52, 812))).current;
+  let height = useRef(new Animated.Value(calcHeight(900.32))).current;
+  let width = useRef(new Animated.Value(calcWidth(846.52))).current;
   let y = useRef(new Animated.Value(-calcHeight(42))).current;
   let logoTextY = useRef(new Animated.Value(calcHeight(147.84))).current;
 
@@ -23,68 +23,87 @@ function SplashView() {
     Animated.timing(opacity, {
       toValue: 1,
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: true,
     }).start();
     Animated.timing(height, {
-      toValue: RFValue(181.42, 812),
+      toValue: RFValue(181.42),
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: false,
     }).start();
     Animated.timing(width, {
-      toValue: RFValue(177.89, 812),
+      toValue: RFValue(177.89),
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: false,
     }).start();
     Animated.timing(y, {
       toValue: calcHeight(200.84),
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: true,
     }).start();
     Animated.timing(scale, {
       toValue: 1,
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: true,
     }).start();
     Animated.timing(logoTextY, {
       toValue: calcHeight(424),
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: true,
     }).start();
     Animated.timing(carOpacity, {
       toValue: 0,
       duration: 500,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 1000,
+      useNativeDriver: true,
     }).start(() => {
       Animated.timing(carOpacity, {
         toValue: 1,
         duration: 500,
-        easing: Easing.elastic(),
+        easing: Easing.elastic(1),
+        useNativeDriver: true,
       }).start();
     });
     Animated.timing(carTranslateY, {
       toValue: calcHeight(1000),
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: true,
     }).start();
     Animated.timing(scaleCar, {
       toValue: 10,
       duration: 1000,
-      easing: Easing.elastic(),
+      easing: Easing.elastic(1),
       delay: 500,
+      useNativeDriver: true,
     }).start(() => {});
-  });
+  }, [
+    opacity,
+    height,
+    width,
+    y,
+    scale,
+    logoTextY,
+    carOpacity,
+    carTranslateY,
+    scaleCar,
+  ]);
 
   return (
     <View
-      colors={config.colors.GRADIENT_BASE_COLORS}
       style={{
         flex: 1,
         backgroundColor: config.colors.BLACK,
@@ -98,7 +117,6 @@ function SplashView() {
           position: 'absolute',
           width: calcWidth(95),
           height: calcHeight(54),
-          position: 'absolute',
           transform: [{ translateY: carTranslateY }, { scale: scaleCar }],
         }}
       >
@@ -116,13 +134,20 @@ function SplashView() {
       <Animated.View
         style={{
           opacity: scale,
-          width: RFValue(131.54, 812),
-          height: RFValue(91.53, 812),
+          width: RFValue(131.54),
+          height: RFValue(91.53),
           position: 'absolute',
           transform: [{ translateY: logoTextY }, { scale: scale }],
         }}
       >
-        <Icons name={'logoText'} />
+        <Icons
+          name={'logoText'}
+          width={RFValue(131.54)}
+          height={RFValue(91.53)}
+          color={'' as any}
+          rotate={false}
+          icon={() => null}
+        />
       </Animated.View>
 
       <Animated.View
