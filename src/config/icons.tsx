@@ -56,12 +56,12 @@ export type IconsName =
   | 'car';
 export type IconsProps = {
   name?: IconsName;
-  icon: Function;
-  color: String;
-  size: Number;
-  width: Number;
-  height: Number;
-  rotate: Boolean;
+  icon?: Function;
+  color?: String;
+  size?: Number;
+  width?: Number;
+  height?: Number;
+  rotate?: Boolean;
   style?: StyleProp<ViewStyle>;
 };
 
