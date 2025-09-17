@@ -17,7 +17,6 @@ import { strings } from '../../Local/i18n';
 import { SharedElement } from 'react-navigation-shared-element';
 import { priceFormatter } from '../../utils/datesUtils';
 import ContentLoader, { Rect } from 'react-content-loader/native';
-import { FadeView } from '../../Molecules/FadeView/FadeView';
 import styles from './styles';
 import { Image_ } from '../../Molecules/Image/Image';
 import ButtonScale from '../ButtonScale/ButtonScale';
