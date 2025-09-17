@@ -1,0 +1,124 @@
+import React, { useEffect, useState } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
+import { Line, ViewRow } from '../../Molecules';
+import { config } from '../../config/appConfig';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { calcHeight, calcWidth } from '../../config/metrics';
+import { Button } from '../Button/Button';
+
+import { connect } from 'react-redux';
+import * as Actions from '../../actions/Actions';
+import * as Types from '../../actions/types';
+
+type LayoutAndSortingCarsProps = {
+  style?: StyleProp<ViewStyle>;
+  onSorting: Function;
+  onChangeLayout: Function;
+};
+function LayoutAndSortingCars(params: LayoutAndSortingCarsProps) {
+  const [layout, setLayout] = useState(params.layout);
+  useEffect(() => {
+    setLayout(params.layout);
+  }, [params.layout]);
+
+  const onPress = type => {
+    params.changeLayout(type, params.component_type);
+  };
+
+  return (
+    <ViewRow style={{ paddingVertical: calcHeight(6) }}>
+      <ViewRow
+        style={{
+          width: calcWidth(70),
+          backgroundColor: config.colors.WHITE,
+          paddingHorizontal: calcWidth(10),
+          height: calcHeight(35),
+          alignItems: 'center',
+          borderWidth: 1,
+          borderColor: config.colors.BORDER_COLOR,
+          borderRadius: calcHeight(35 / 2),
+        }}
+      >
+        <Button
+          onPress={() => onPress('big')}
+          iconStyle={{
+            color:
+              layout === 'big' ? config.colors.BASE_COLOR : config.colors.GRAY,
+            width: RFValue(13, 812),
+            height: RFValue(13, 812),
+          }}
+          style={{ height: '100%', alignItems: 'center' }}
+          iconName={'smallLayout'}
+          textStyle={{ fontSize: '10', color: config.colors.BLACK }}
+        />
+        <Line size={'100%'} verticalLine />
+        <Button
+          onPress={() => onPress('small')}
+          style={{ height: '100%', alignItems: 'center' }}
+          iconStyle={{
+            color:
+              layout === 'small'
+                ? config.colors.BASE_COLOR
+                : config.colors.GRAY,
+            width: RFValue(13, 812),
+            height: RFValue(13, 812),
+          }}
+          iconName={'listLayout'}
+          textStyle={{ fontSize: '10', color: config.colors.BLACK }}
+        />
+      </ViewRow>
+      <Button
+        onPress={params.onSorting}
+        iconStyle={{
+          color: config.colors.BASE_COLOR,
+          width: RFValue(12, 812),
+          height: RFValue(12, 812),
+        }}
+        style={{
+          backgroundColor: config.colors.WHITE,
+          paddingHorizontal: calcWidth(10),
+          height: calcHeight(35),
+          alignItems: 'center',
+          borderWidth: 1,
+          borderColor: config.colors.BORDER_COLOR,
+          borderRadius: calcHeight(35 / 2),
+        }}
+        text={
+          params.selectedIndex != -1
+            ? params.data[params.selectedIndex].name
+            : 'رتب حسب'
+        }
+        iconName={
+          params.selectedIndex != -1
+            ? params.data[params.selectedIndex].iconName
+            : undefined
+        }
+        textStyle={{ fontSize: '10', color: config.colors.BLACK }}
+      />
+    </ViewRow>
+  );
+}
+
+function mapStateToProps(state) {
+  return {
+    homeCarsLayout: state.appSettingsReducer.homeCarsLayout,
+    isThare_CarsPages: state.presistReducer.isThare_CarsPages,
+    all_cars_nextPage: state.presistReducer.all_cars_nextPage,
+    sorting_items: state.appSettingsReducer.sorting_items,
+    brands: state.presistReducer.brands,
+    cars_list: state.presistReducer.cars,
+    isLoading: state.loadingReducer[Types.GET_ALL_CARS],
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    changeLayout: (layout, component_type) =>
+      dispatch(Actions.changeLayout(layout, component_type)),
+    //   getAllCars: (paylaod) => dispatch(Actions.requestAction(paylaod)),
+    //   requestAction: (paylaod) => dispatch(Actions.requestAction(paylaod)),
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LayoutAndSortingCars);
