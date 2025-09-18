@@ -5,10 +5,8 @@ import { config } from '../../config/appConfig';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { calcHeight, calcWidth } from '../../config/metrics';
 import { Button } from '../Button/Button';
-
-import { connect } from 'react-redux';
-import * as Actions from '../../actions/Actions';
-import * as Types from '../../actions/types';
+import { useAppDispatch } from '../../store/hooks';
+import { changeLayout } from '../../store/slices/appSettingsSlice';
 
 type LayoutAndSortingCarsProps = {
   style?: StyleProp<ViewStyle>;
@@ -16,13 +14,17 @@ type LayoutAndSortingCarsProps = {
   onChangeLayout: Function;
 };
 function LayoutAndSortingCars(params: LayoutAndSortingCarsProps) {
+  const dispatch = useAppDispatch();
   const [layout, setLayout] = useState(params.layout);
+
   useEffect(() => {
     setLayout(params.layout);
   }, [params.layout]);
 
-  const onPress = type => {
-    params.changeLayout(type, params.component_type);
+  const onPress = (type: string) => {
+    dispatch(
+      changeLayout({ layout: type, component_type: params.component_type }),
+    );
   };
 
   return (
@@ -99,26 +101,4 @@ function LayoutAndSortingCars(params: LayoutAndSortingCarsProps) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    homeCarsLayout: state.appSettingsReducer.homeCarsLayout,
-    isThare_CarsPages: state.presistReducer.isThare_CarsPages,
-    all_cars_nextPage: state.presistReducer.all_cars_nextPage,
-    sorting_items: state.appSettingsReducer.sorting_items,
-    brands: state.presistReducer.brands,
-    cars_list: state.presistReducer.cars,
-    isLoading: state.loadingReducer[Types.GET_ALL_CARS],
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return {
-    changeLayout: (layout, component_type) =>
-      dispatch(Actions.changeLayout(layout, component_type)),
-    //   getAllCars: (paylaod) => dispatch(Actions.requestAction(paylaod)),
-    //   requestAction: (paylaod) => dispatch(Actions.requestAction(paylaod)),
-  };
-}
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LayoutAndSortingCars);
+export default LayoutAndSortingCars;

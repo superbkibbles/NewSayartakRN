@@ -5,7 +5,7 @@ import { Icons } from '../../config/icons';
 import styles from './styles';
 import { config } from '../../config/appConfig';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store/hooks';
 
 function TabBottomComponent({
   state,
@@ -16,7 +16,7 @@ function TabBottomComponent({
   descriptors: any;
   navigation: any;
 }) {
-  let token = useSelector(state => state.presistReducer.token);
+  let token = useAppSelector(state => state.persist.token);
 
   return (
     <View

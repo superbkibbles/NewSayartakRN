@@ -531,6 +531,12 @@ export default function RNApp() {
             name="NetworkError"
             component={NetworkError}
           /> */}
+
+          <Stack.Screen
+            options={{ animationEnabled: true }}
+            name="NetworkError"
+            component={HomeStack}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

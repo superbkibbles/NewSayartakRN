@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Linking } from 'react-native';
-import { connect } from 'react-redux';
-import * as Actions from '../../../actions/Actions';
 import Modal from 'react-native-modal';
 import { calcHeight, calcWidth } from '../../../config/metrics';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -9,25 +7,43 @@ import { Button } from '../../Button/Button';
 import { Text_ } from '../../../Molecules';
 import { getAppInfo } from '../../../utils/functions';
 import RocketUpdateApp from '../../../Atoms/RocketUpdateApp/RocketUpdateApp';
+import { useAppSelector, useAppDispatch } from '../../../store/hooks';
+import { setWarningVersion } from '../../../store/slices/persistSlice';
 
 type UpdateVersionModalProps = {
-  isVisible: Boolean;
-  onSubmit: Function;
-  onCancel: Function;
-  data: Array<any>;
+  isVisible?: Boolean;
+  onSubmit?: Function;
+  onCancel?: Function;
+  data?: Array<any>;
 };
+
 function UpdateVersionModal(params: UpdateVersionModalProps) {
+  const dispatch = useAppDispatch();
+  const showWarningUpdateVersion = useAppSelector(
+    state => state.persist.showWarningUpdateVersion,
+  );
+  const settings = useAppSelector(state => state.appSettings.settings);
+
   let [isVisible, setVisible] = useState(false);
+
   useEffect(() => {
     setTimeout(() => {
-      setVisible(params.showWarningUpdateVersion);
+      setVisible(showWarningUpdateVersion);
     }, 5000);
-  }, []);
+  }, [showWarningUpdateVersion]);
 
   const onClose = () => {
     setVisible(false);
-    params.setWarningVersion(false, parseInt(params.settings.current_version));
+    dispatch(
+      setWarningVersion({
+        isShow: false,
+        version: settings.current_version
+          ? parseInt(settings.current_version)
+          : undefined,
+      }),
+    );
   };
+
   const onUpdate = async () => {
     let url = 'https://apps.apple.com/us/app/syartk/id1543990290';
     let appInfo = await getAppInfo();
@@ -37,7 +53,7 @@ function UpdateVersionModal(params: UpdateVersionModalProps) {
         ? 'https://appgallery.huawei.com/#/app/C103522793'
         : 'https://play.google.com/store/apps/details?id=com.syartk';
     }
-    params.setWarningVersion(false);
+    dispatch(setWarningVersion({ isShow: false }));
     setVisible(false);
     setTimeout(() => {
       Linking.openURL(url);
@@ -109,7 +125,7 @@ function UpdateVersionModal(params: UpdateVersionModalProps) {
             color={'#B5B5B5'}
             textAlign="center"
           >
-            {params.settings.user_msg}
+            {settings.user_msg}
           </Text_>
           <Button
             onPress={onUpdate}
@@ -128,17 +144,4 @@ function UpdateVersionModal(params: UpdateVersionModalProps) {
     </Modal>
   );
 }
-function mapStateToProps(state) {
-  return {
-    showWarningUpdateVersion: state.presistReducer.showWarningUpdateVersion,
-    settings: state.appSettingsReducer.settings,
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return {
-    setWarningVersion: (isShow, version) =>
-      dispatch(Actions.setWarningVersion(isShow, version)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateVersionModal);
+export default UpdateVersionModal;

@@ -1,80 +1,107 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import * as Actions from '../../actions/Actions';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
-  appSettings,
-  getBrandModals,
   getBrands,
   getCities,
-  getNotViewdNotificationCount,
-} from '../../api/ApisFunctions';
+  getNotViewedNotification,
+  getAppSettings,
+  makeApiCall,
+} from '../../store/thunks/apiThunks';
+// Removed old API import - using RTK thunks instead
+import { setWarningVersion } from '../../store/slices/persistSlice';
 import NavigationService from '../../navigation/NavigationService';
 import SplashView from './SplashView';
-// import messaging from '@react-native-firebase/messaging'
 import { getAppInfo } from '../../utils/functions';
 
-function Splash(params: any) {
-  // const requestUserPermission = async () => {
-  //   const settings = await messaging().requestPermission();
-  //   if (settings) {
+function Splash() {
+  const dispatch = useAppDispatch();
 
-  //   }
-  // }
-  // get app setting moved inside effect to avoid changing deps
+  // Select state using typed selectors
+  const carData = useAppSelector(state => state.persist.carData);
+  const token = useAppSelector(state => state.persist.token);
+  const brands = useAppSelector(state => state.persist.brands);
+  const skipThisVersion = useAppSelector(
+    state => state.persist.skipThisVersion,
+  );
 
-  // get brand list
   useEffect(() => {
-    // requestUserPermission()
-    params.requestAction(getCities(undefined));
-    params.requestAction(getBrands(undefined));
-    if (params.carData.brand !== -1)
-      params.requestAction(
-        getBrandModals(params.brands[params.carData.brand].id, undefined),
-      );
-    if (params.token) params.requestAction(getNotViewdNotificationCount());
-    (async () => {
-      const appInfo = (await getAppInfo()) as any;
-      params.appSettings(
-        appSettings(
-          '?platform=' + appInfo.platform + '&version=' + appInfo.version,
-          (data: any) => {
-            if (data === 'logout_user') {
-              NavigationService.replace('Tabs', undefined);
-              return;
+    // Load initial data
+    dispatch(getCities());
+    dispatch(getBrands());
+
+    // Load brand modals if a brand is selected
+    if (carData.brand !== -1 && brands.length > 0) {
+      const selectedBrand = brands.find(brand => brand.id === carData.brand);
+      if (selectedBrand) {
+        dispatch(
+          makeApiCall({
+            actionType: 'GET_BRAND_MODALS',
+            requestMethod: 'GET',
+            serviceUrl: `/cars/brands/${selectedBrand.id}/models/`,
+            setHeader: false,
+            presist: false,
+          }),
+        );
+      }
+    }
+
+    // Load notification count if user is logged in
+    if (token) {
+      dispatch(getNotViewedNotification());
+    }
+
+    // Load app settings and handle navigation
+    const initializeApp = async () => {
+      try {
+        const appInfo = (await getAppInfo()) as any;
+        console.log('App Info:', appInfo);
+
+        console.log('Calling getAppSettings...');
+        const result = await dispatch(
+          getAppSettings({
+            platform: appInfo.platform ?? 'ios',
+            version: appInfo.version ?? '1.0.0',
+          }),
+        ).unwrap();
+
+        console.log('App settings result:', result);
+
+        // Handle app settings response
+        const data = result.data;
+
+        setTimeout(() => {
+          if (data?.status === 'force_update') {
+            NavigationService.replace('ForceUpdateApp', undefined);
+          } else {
+            if (
+              skipThisVersion < parseInt(data?.current_version, 10) &&
+              data.status === 'warning_update'
+            ) {
+              dispatch(setWarningVersion({ isShow: true, version: undefined }));
             }
-            setTimeout(() => {
-              if (data.status === 'force_update')
-                NavigationService.replace('ForceUpdateApp', undefined);
-              else {
-                if (
-                  params.skipThisVersion < parseInt(data.current_version, 10) &&
-                  data.status === 'warning_update'
-                )
-                  params.setWarningVersion(true, undefined);
-                NavigationService.replace('Tabs', undefined);
-              }
-            }, 2000);
-          },
-        ),
-      );
-    })();
-  }, [params]);
-  return <SplashView {...params} />;
+            NavigationService.replace('Tabs', undefined);
+          }
+        }, 2000);
+      } catch (error) {
+        console.error('Failed to load app settings:', error);
+        // Fallback navigation
+        setTimeout(() => {
+          NavigationService.replace('Tabs', undefined);
+        }, 2000);
+      }
+    };
+
+    initializeApp();
+  }, [dispatch, carData.brand, token, brands, skipThisVersion]);
+
+  return (
+    <SplashView
+      carData={carData}
+      token={token}
+      brands={brands}
+      skipThisVersion={skipThisVersion}
+    />
+  );
 }
-function mapStateToProps(state: any) {
-  return {
-    carData: state.presistReducer.carData,
-    token: state.presistReducer.token,
-    brands: state.presistReducer.brands,
-    skipThisVersion: state.presistReducer.skipThisVersion,
-  };
-}
-function mapDispatchToProps(dispatch: any) {
-  return {
-    setWarningVersion: (isShow: any, version?: any) =>
-      dispatch(Actions.setWarningVersion(isShow, version)),
-    appSettings: (paylaod: any) => dispatch(Actions.requestAction(paylaod)),
-    requestAction: (paylaod: any) => dispatch(Actions.requestAction(paylaod)),
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Splash);
+
+export default Splash;

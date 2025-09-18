@@ -1,104 +1,63 @@
 /*
- * Reducer actions related with App
+ * Reducer actions related with App - Updated for Redux Toolkit
  */
-import * as types from './types';
+export * from './index';
 
-export function setWarningVersion(isShow: any, version: any) {
-  return {
-    type: types.SET_WARNING_VERSION,
-    isShow,
-    version,
-  };
-}
-// store car data
-export function setAdvancedFilter(data: any, filterKey: any) {
-  return {
-    type: types.SET_ADVANCED_FILTER,
-    data,
-    filterKey: filterKey,
-  };
-}
-// store car data
-export function logout() {
-  return {
-    type: types.LOGOUT_USER,
-  };
-}
+// Re-export specific actions for backward compatibility
+export {
+  setWarningVersion,
+  setAdvancedFilterPersist as setAdvancedFilter,
+  storeCarData,
+  logout,
+  resetCarData as reset,
+  enableLoader,
+  disableLoader,
+  changeLayout,
+} from './index';
 
-export function reset(data: any) {
-  return {
-    type: types.RESET,
-    data,
-  };
-}
-// store car data
-export function storeCarData(data: any) {
-  return {
-    type: types.STORE_ADD_CAR_DATA,
-    data,
-  };
-}
-
+// Legacy function wrappers for complex actions that used to dispatch sagas
 export function requestAction(payload: any) {
-  return {
-    type: types.REQUEST_ACTION,
-    payload,
-  };
+  // This function is deprecated - use specific async thunks instead
+  console.warn(
+    'requestAction is deprecated. Use specific async thunks from apiThunks.ts',
+  );
+  return { type: 'DEPRECATED_REQUEST_ACTION', payload };
 }
+
 export function requestActionLatest(payload: any) {
-  return {
-    type: types.REQUEST_ACTION_LATEST,
-    payload,
-  };
+  // This function is deprecated - use specific async thunks instead
+  console.warn(
+    'requestActionLatest is deprecated. Use specific async thunks from apiThunks.ts',
+  );
+  return { type: 'DEPRECATED_REQUEST_ACTION_LATEST', payload };
 }
 
 export function saveResponseGeneral(
   payload: { actionType: any },
   response: any,
 ) {
-  return {
-    type: payload.actionType,
-    payload,
-    response,
-  };
+  // This function is deprecated - responses are handled automatically by async thunks
+  console.warn(
+    'saveResponseGeneral is deprecated. Responses are handled automatically by async thunks.',
+  );
+  return { type: 'DEPRECATED_SAVE_RESPONSE_GENERAL', payload, response };
 }
 
 export function saveResponsePresist(
   payload: { actionType: any },
   response: any,
 ) {
-  return {
-    type: payload.actionType,
-    payload,
-    response,
-  };
+  // This function is deprecated - responses are handled automatically by async thunks
+  console.warn(
+    'saveResponsePresist is deprecated. Responses are handled automatically by async thunks.',
+  );
+  return { type: 'DEPRECATED_SAVE_RESPONSE_PRESIST', payload, response };
 }
 
 export function clearPresist() {
-  return {
-    type: types.CLEAR_PRESIST_REDUCER,
-  };
-}
-
-//Loaders Actions
-
-export function enableLoader(actionType: any) {
-  return {
-    type: types.ENABLE_LOADER,
-    actionType,
-  };
-}
-
-export function disableLoader(actionType: any) {
-  return {
-    type: types.DISABLE_LOADER,
-    actionType,
-  };
-}
-export function changeLayout(layout: any, component_type: any) {
-  return {
-    type: types.CHANGE_LAYOUT,
-    layout: layout,
-    component_type: component_type,
-  };
+  // This function is deprecated - use specific reset actions instead
+  console.warn(
+    'clearPresist is deprecated. Use specific reset actions from slices.',
+  );
+  return { type: 'DEPRECATED_CLEAR_PRESIST' };
 }

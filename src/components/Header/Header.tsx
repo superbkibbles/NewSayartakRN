@@ -10,7 +10,7 @@ import NavigationService from '../../navigation/NavigationService';
 import { Badge } from '../../Molecules/Badge/Badge';
 import { InputSearch } from '../InputSearch/InputSearch';
 import LinearGradient from 'react-native-linear-gradient';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../store/hooks';
 // import { Easing } from 'react-native-reanimated'
 
 type HeaderProps = {
@@ -19,10 +19,10 @@ type HeaderProps = {
   onFavourite: Function;
 };
 export function Header(params: HeaderProps) {
-  let notificationCount = useSelector(
-    state => state.presistReducer.notificationCount,
+  let notificationCount = useAppSelector(
+    state => state.persist.notificationCount,
   );
-  let token = useSelector(state => state.presistReducer.token);
+  let token = useAppSelector(state => state.persist.token);
   const onBack = () => {
     NavigationService.goBack();
   };
@@ -146,7 +146,7 @@ export function HeaderWithShare(params: HeaderProps) {
   const onBack = () => {
     NavigationService.goBack();
   };
-  let token = useSelector(state => state.presistReducer.token);
+  let token = useAppSelector(state => state.persist.token);
 
   const onFavourite = () => {
     if (token) {
