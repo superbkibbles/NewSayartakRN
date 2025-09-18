@@ -4,9 +4,9 @@ import { View, ViewStyle, StyleProp } from 'react-native';
 
 type LineProps = {
   style?: StyleProp<ViewStyle>;
-  verticalLine?: Boolean;
-  size: String;
-  color: String;
+  verticalLine?: boolean;
+  size?: string | number;
+  color?: string;
 };
 export function Line(params: LineProps) {
   return (

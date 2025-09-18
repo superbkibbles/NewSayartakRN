@@ -10,7 +10,7 @@ type TabButtonsProps = {
   style?: StyleProp<ViewStyle>;
   textStyle?: {
     fontFamily: FontFamilyType;
-    color: String;
+    color: string;
     fontSize:
       | '8'
       | '9'
@@ -31,16 +31,18 @@ type TabButtonsProps = {
       | '24';
   };
   iconStyle?: {
-    width: Number;
-    color: String;
-    height: Number;
+    width?: number;
+    color?: string;
+    height?: number;
+    scale?: boolean;
   };
-  iconName: IconsName;
-  text: String;
-  onPress: Function;
-  activeOpacity: Number;
-  defaultStyle: Boolean;
-  disabled: Boolean;
+  iconName?: IconsName;
+  text?: string;
+  onPress?: (event?: any) => void;
+  activeOpacity?: number;
+  defaultStyle?: boolean;
+  disabled?: boolean;
+  children?: React.ReactNode;
 };
 export function Button(params: TabButtonsProps) {
   return (
@@ -73,13 +75,15 @@ export function Button(params: TabButtonsProps) {
       )}
       {params.iconName && (
         <Icons
-          scale={params.iconStyle.scale}
-          color={params.iconStyle.color}
+          scale={params.iconStyle?.scale || false}
+          color={params.iconStyle?.color || 'black'}
           width={
-            params.iconStyle.width ? params.iconStyle.width : RFValue(15, 812)
+            params.iconStyle?.width ? params.iconStyle.width : RFValue(15, 812)
           }
           height={
-            params.iconStyle.height ? params.iconStyle.height : RFValue(15, 812)
+            params.iconStyle?.height
+              ? params.iconStyle.height
+              : RFValue(15, 812)
           }
           name={params.iconName}
         />

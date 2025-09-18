@@ -97,7 +97,7 @@ function Item({ route, isFocused, label, onPress }) {
       />
       <Text
         style={{
-          color: isFocused ? config.colors.BASE_COLOR : config.colors.gray,
+          color: isFocused ? config.colors.BASE_COLOR : config.colors.GRAY,
           fontFamily: isFocused ? config.fonts.bold : config.fonts.light,
           fontSize: RFValue(10, 812),
           marginTop: 3,

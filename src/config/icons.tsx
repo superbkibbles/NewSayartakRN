@@ -62,6 +62,7 @@ export type IconsProps = {
   width?: Number;
   height?: Number;
   rotate?: Boolean;
+  scale?: Boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -119,7 +120,7 @@ function Icons(props: IconsProps) {
     case 'update':
       return (
         <View style={props.style}>
-          <SvgIcon {...props} />
+          <SvgIcon {...props} scale={props.scale || false} />
         </View>
       );
     default:

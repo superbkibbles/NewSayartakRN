@@ -2,7 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableWithoutFeedback, Animated, ViewProps } from 'react-native';
 
-export default class TouchableScale extends React.Component {
+interface TouchableScaleProps {
+  defaultScale?: number;
+  activeScale?: number;
+  tension?: number;
+  friction?: number;
+  pressInTension?: number;
+  pressInFriction?: number;
+  pressOutTension?: number;
+  pressOutFriction?: number;
+  useNativeDriver?: boolean;
+  onPress?: () => void;
+  onPressIn?: (...args: any[]) => void;
+  onPressOut?: (...args: any[]) => void;
+  children?: React.ReactNode;
+  style?: any;
+}
+
+interface TouchableScaleState {}
+
+export default class TouchableScale extends React.Component<
+  TouchableScaleProps,
+  TouchableScaleState
+> {
+  scaleAnimation: Animated.Value;
   static defaultProps: {
     defaultScale: number;
     activeScale: number;
@@ -10,14 +33,13 @@ export default class TouchableScale extends React.Component {
     friction: number;
     useNativeDriver: boolean;
   };
-  constructor(...args) {
-    super(...args);
+  constructor(props: TouchableScaleProps) {
+    super(props);
     /** @type {TouchableScaleProps} */
-    const props = this.props;
 
     this.onPressIn = this.onPressIn.bind(this);
     this.onPressOut = this.onPressOut.bind(this);
-    this.scaleAnimation = new Animated.Value(props.defaultScale);
+    this.scaleAnimation = new Animated.Value(props.defaultScale || 1);
   }
 
   render() {
@@ -45,7 +67,7 @@ export default class TouchableScale extends React.Component {
     );
   }
 
-  onPressIn(...args) {
+  onPressIn(...args: any[]) {
     /** @type {TouchableScaleProps} */
     const props = this.props;
     const tension =
@@ -58,10 +80,10 @@ export default class TouchableScale extends React.Component {
         : props.friction;
 
     Animated.spring(this.scaleAnimation, {
-      toValue: props.activeScale,
+      toValue: props.activeScale || 0.95,
       tension: tension,
       friction: friction,
-      useNativeDriver: props.useNativeDriver,
+      useNativeDriver: props.useNativeDriver || false,
     }).start();
 
     if (props.onPressIn) {
@@ -69,7 +91,7 @@ export default class TouchableScale extends React.Component {
     }
   }
 
-  onPressOut(...args) {
+  onPressOut(...args: any[]) {
     /** @type {TouchableScaleProps} */
     const props = this.props;
     const tension =
@@ -82,10 +104,10 @@ export default class TouchableScale extends React.Component {
         : props.friction;
 
     Animated.spring(this.scaleAnimation, {
-      toValue: props.defaultScale,
+      toValue: props.defaultScale || 1,
       tension: tension,
       friction: friction,
-      useNativeDriver: props.useNativeDriver,
+      useNativeDriver: props.useNativeDriver || false,
     }).start();
 
     if (props.onPressOut) {

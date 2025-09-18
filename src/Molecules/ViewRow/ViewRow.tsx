@@ -4,8 +4,8 @@ import { calcWidth } from '../../config/metrics';
 
 type ViewRowProps = {
   style?: StyleProp<ViewStyle>;
-  withoutPadding: Boolean;
-  children: React.ReactNode;
+  withoutPadding?: boolean;
+  children?: React.ReactNode;
 };
 export function ViewRow(params: ViewRowProps) {
   return (

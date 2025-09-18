@@ -41,6 +41,7 @@ export const config = {
     BLUE: '#273192',
     LIGHT_BLUE: '#277EF5',
     GRAY: '#B5B5B5',
+    gray: '#B5B5B5', // Added for backward compatibility
     BORDER_COLOR: '#EBEBEB',
     BACKGROUND: '#F4F6FC',
     WHITE: 'white',

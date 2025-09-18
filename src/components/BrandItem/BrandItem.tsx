@@ -10,7 +10,9 @@ import ButtonScale from '../ButtonScale/ButtonScale';
 
 type BrandItemProps = {
   style?: StyleProp<ViewStyle>;
-  onPress: Function;
+  onPress: () => void;
+  icon: string;
+  name: string;
 };
 export function BrandItem(params: BrandItemProps) {
   let isSvg = params.icon.indexOf('.svg') !== -1;

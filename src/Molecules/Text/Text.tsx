@@ -33,9 +33,10 @@ type TextProps = {
     | '22'
     | '23'
     | '24';
-  color: String;
-  numberOfLines: Number;
+  color?: string;
+  numberOfLines?: number;
   onLayout?: (event: LayoutChangeEvent) => void;
+  children?: React.ReactNode;
 };
 export function Text_(params: TextProps) {
   return (
